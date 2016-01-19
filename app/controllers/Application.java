@@ -75,9 +75,14 @@ public class Application extends Controller {
     }
     public Result getTickets()
     {
-        //?????????????
-        List<Ticket> tickets = new Model.Finder(String.class,Ticket.class).all();
-        java.util.Collections.sort(tickets,(o1, o2) -> {return ((Ticket)o1).ticketID.compareTo(((Ticket)o2).ticketID);});
+        List <Ticket> tickets = new Model.Finder(String.class,Ticket.class).all();
+
+        java.util.Collections.sort(tickets,(o1, o2) -> {
+            if(o1.ticketID.length() == o2.ticketID.length())
+                return o1.ticketID.compareTo(o2.ticketID);
+            return o1.ticketID.length() - o2.ticketID.length();
+        });
+
         return ok(toJson(tickets));
     }
     public Result closeTicket(String ticketID)
