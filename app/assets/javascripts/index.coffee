@@ -20,7 +20,7 @@
 
 
 
-        return $.get("/tickets", function(tickets) {
+        $.get("/tickets", function(tickets) {
             $.each(tickets, function(index, ticket) {
 
 
