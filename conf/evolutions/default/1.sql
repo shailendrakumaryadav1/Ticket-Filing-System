@@ -11,7 +11,7 @@ create table ticket (
   assigned_to               varchar(255),
   issues                    varchar(255),
   status                    varchar(255),
-  comment                   varchar(255),
+  comment                   varchar(5000),
   constraint pk_ticket primary key (ticket_id))
 ;
 

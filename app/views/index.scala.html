@@ -1,53 +1,53 @@
 @(message: String)
 
-@main("Ticket Management System") {
+    @main("Ticket Management System") {
 
 
-    <style xmlns="http://www.w3.org/1999/html">
+        <style xmlns="http://www.w3.org/1999/html">
 
-    body {
-    background-color: #e9fefe ;
-    height:100%;
-    font-family: sans-serif;
-    }
+        body {
+        background-color: #e9fefe ;
+        height:100%;
+        font-family: sans-serif;
+        }
 
-    table, td, th {
-    border: 1px solid black;
+        table, td, th {
+        border: 1px solid black;
         text-align: center;
-    }
+        }
 
-    table {
-    background-color: #d0e4fe;
-    border-collapse: collapse;
-    width: 100%;
-    }
+        table {
+        background-color: #d0e4fe;
+        border-collapse: collapse;
+        width: 100%;
+        }
 
 
 
-    table#table th	{
-    background-color: black;
-    color: white;
-    height: 50px;
+        table#table th	{
+        background-color: black;
+        color: white;
+        height: 50px;
         font-size: large;
 
-    }
-    #commentBox
-    {
-    height: 100px;
-    max-height: 100px;
+        }
+        #commentBox
+        {
+        height: 100px;
+        max-height: 100px;
         max-width: 100%;
         width: 50%;
         background-color: #e2d2ff ;
 
 
-    }
+        }
 
-    </style>
+        </style>
 
-    <script type="text/javascript" src='@routes.Assets.versioned("lib/jquery/jquery.min.js")'></script>
+        <script type="text/javascript" src='@routes.Assets.versioned("lib/jquery/jquery.min.js")'></script>
 
-    <script type="text/javascript" src='@routes.Assets.versioned("javascripts/index.js")'></script>
-<script>
+        <script type="text/javascript" src='@routes.Assets.versioned("javascripts/index.js")'></script>
+        <script>
 
     function editTicket_Link(ticketID)
     {
@@ -80,71 +80,83 @@
 
 
 
-<h2 align="center" style="background-color: #72CCD1" >
-    <a href="https://www.redmart.com/">
-        <img src="@routes.Assets.versioned("images/logo.png")" alt="RedMart Logo" align="left" style="width:126px;height:42px;border:0;background-color: white">
-    </a>
+        <h2 align="center" style="background-color: #72CCD1" >
+            <a href="https://www.redmart.com/">
+                <img src="@routes.Assets.versioned("images/logo.png")" alt="RedMart Logo" align="left" style="width:126px;height:42px;border:0;background-color: white">
+            </a>
 
-    Ticket Management System
-</h2>
+            Ticket Management System
+        </h2>
 
-    <hr color="#EF3E54">
-    <hr color="#54C3C7">
-<br>
-    <table id="table" align="center" border="2">
-        <tr>
-            <th>Ticket ID</th>
-            <th>Customer Name</th>
-            <th>Customer ID</th>
-            <th>Created By</th>
-            <th>Assigned To</th>
-            <th>Issues</th>
-            <th>Status</th>
-            <th>Comments</th>
-            <th>View Link</th>
-            <th>Edit Link</th>
-            <th>Close Link</th>
-        </tr>
+        <hr color="#EF3E54">
+        <hr color="#54C3C7">
+        <br>
+        <table id="table" align="center" border="2">
+            <tr>
+                <th>Ticket ID</th>
+                <th>Customer Name</th>
+                <th>Customer ID</th>
+                <th>Created By</th>
+                <th>Assigned To</th>
+                <th>Issues</th>
+                <th>Status</th>
+                <th>Comments</th>
+                <th>View Link</th>
+                <th>Edit Link</th>
+                <th>Close Link</th>
+            </tr>
 
-    </table>
-<br/>
-<hr>
-    <form action="@routes.Application.addTicket()" method="post" xmlns="http://www.w3.org/1999/html">
-
-        <input type="text" name="name" placeholder="Customer Name"/>
-        <input type="text" name="nameID" placeholder="Customer ID"/>
-        <input type="text" name="createdBy" placeholder="Created By"/>
-        <input type="text" name="assignedTo" placeholder="Assign To"/>
-<br>
+        </table>
+        <br/>
         <hr>
-Issues: &ensp;
-        <input type="radio" name="issues" value="General" checked> General&ensp;
-        <input type="radio" name="issues" value="Logistics"> Logistics&ensp;
-        <input type="radio" name="issues" value="Supply"> Supply&ensp;
+        <form action="@routes.Application.addTicket()" method="post" xmlns="http://www.w3.org/1999/html">
+
+            <input type="text" name="name" placeholder="Customer Name"/>
+            <input type="text" name="nameID" placeholder="Customer ID"/>
+            <input type="text" name="createdBy" placeholder="Created By"/>
+            <input type="text" name="assignedTo" placeholder="Assign To"/>
+            <br>
+            <hr>
+            <b>Issues:</b>&ensp;
+            <input type="radio" name="issues" value="Account"> Account&ensp;
+            <input type="radio" name="issues" value="Customer Service"> Customer Service&ensp;
+            <input type="radio" name="issues" value="Delivery"> Delivery&ensp;
+            <input type="radio" name="issues" value="Exchange"> Exchange&ensp;
+            <input type="radio" name="issues" value="General" checked> General&ensp;
+            <input type="radio" name="issues" value="Legal"> Legal&ensp;
+            <input type="radio" name="issues" value="Logistics"> Logistics&ensp;
+            <input type="radio" name="issues" value="Payment"> Payment&ensp;
+            <input type="radio" name="issues" value="Personalization"> Personalization&ensp;
+            <input type="radio" name="issues" value="Refund"> Refund&ensp;
+            <input type="radio" name="issues" value="Returns"> Returns&ensp;
+            <input type="radio" name="issues" value="Services"> Services&ensp;
+            <input type="radio" name="issues" value="Shipping"> Shipping&ensp;
+            <input type="radio" name="issues" value="Site Navigation"> Site Navigation&ensp;
+            <input type="radio" name="issues" value="Supply"> Supply&ensp;
+
+            <hr>
+
+
+            <textarea id="commentBox" name="comment" placeholder="Enter Comments" content="text"></textarea>
+            <br>
+            <hr>
+            <button>Add the Ticket</button>
+
+
+
+        </form>
+
+
 
         <hr>
+        <div id="footer" align="center">
+            <img src="@routes.Assets.versioned("images/smiley.gif")" alt="Smiley face">
 
-
-        <textarea id="commentBox" name="comment" placeholder="Enter Comments" content="text"></textarea>
-<br>
-<hr>
-        <button>Add the Ticket</button>
-
-
-
-    </form>
-
-
-
-<hr>
-    <div id="footer" align="center">
-        <img src="@routes.Assets.versioned("images/smiley.gif")" alt="Smiley face">
-
-        <p>
+            <p>
                 Thank You!
-        </p>
+            </p>
 
 
-    </div>
+        </div>
 
-}
+    }

@@ -42,8 +42,10 @@
                     t25=$("<td style=\"color: #ff0000\">").text(ticket.status);
                 else if(ticket.status=="OPEN")
                     t25=$("<td style=\"color: #00B300\">").text(ticket.status);
-                else
+                else if(ticket.status=="CLOSED")
                     t25=$("<td style=\"color: #0000ff\">").text(ticket.status);
+                else
+                    t25=$("<td style=\"color: #000000\">").text(ticket.status);
 
 
 

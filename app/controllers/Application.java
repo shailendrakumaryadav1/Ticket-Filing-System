@@ -11,10 +11,6 @@ import play.mvc.*;
 import views.html.*;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Collections;
 import java.util.List;
 
 import static play.libs.Json.toJson;
@@ -27,19 +23,18 @@ public class Application extends Controller {
     public Result addTicket() {
 
         Ticket ticket = Form.form(Ticket.class).bindFromRequest().get();
-
+        ticket.setTicketID();
+        ticket.setStatus();
 
         if (ticket.validateTicketEntries()) {
-            ticket.setTicketID();
-            ticket.setStatus();
-            ticket.save();
+
+            ticket.saveTicket();
             JOptionPane.showMessageDialog(null, "Ticket Added Successfully\nTicket ID : " + ticket.ticketID);
         } else {
             JOptionPane.showMessageDialog(null, "Invalid Entries for the Ticket");
         }
 
         return redirect(routes.Application.index());
-
     }
 
     public Result getTicket(String ticketID) {
@@ -59,7 +54,9 @@ public class Application extends Controller {
         if (ticket.status.equals("CLOSED")) {
             JOptionPane.showMessageDialog(null, "Ticket " + ticket.ticketID + " once closed, cannot be edited", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(null, "edit window " + ticket.ticketID);
+
+            ticket.showTicketEditDialogBox();
+            //JOptionPane.showMessageDialog(null, "edit window " + ticket.ticketID);
         }
 
         return redirect(routes.Application.index());
@@ -85,10 +82,9 @@ public class Application extends Controller {
             JOptionPane.showMessageDialog(null, "Ticket " + ticket.ticketID + " is already Closed", "Error", JOptionPane.ERROR_MESSAGE);
         } else {
             ticket.status = "CLOSED";
-            ticket.save();
+            ticket.saveTicket();
             JOptionPane.showMessageDialog(null, "Ticket " + ticket.ticketID + " has been closed!");
         }
         return redirect(routes.Application.index());
     }
-
 }
