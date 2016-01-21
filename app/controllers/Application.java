@@ -26,12 +26,13 @@ public class Application extends Controller {
         ticket.setTicketID();
         ticket.setStatus();
 
-        if (ticket.validateTicketEntries()) {
+        String validateMsg=ticket.validateTicketEntries();
+        if (validateMsg.equals("OK")) {
 
             ticket.saveTicket();
             JOptionPane.showMessageDialog(null, "Ticket Added Successfully\nTicket ID : " + ticket.ticketID);
         } else {
-            JOptionPane.showMessageDialog(null, "Invalid Entries for the Ticket");
+            JOptionPane.showMessageDialog(null, validateMsg);
         }
 
         return redirect(routes.Application.index());

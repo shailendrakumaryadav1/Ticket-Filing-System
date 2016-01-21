@@ -1,7 +1,7 @@
 package models;
 
 import play.db.ebean.Model;
-import play.db.ebean.Model;
+
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,9 +10,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -34,12 +31,64 @@ public class Ticket extends Model{
     {
         save();
     }
-    public boolean validateTicketEntries()
+    public String validateTicketEntries()
     {
-        return true;
+        ticketID=ticketID.trim();
+        name=name.trim();
+        nameID=nameID.trim();
+        createdBy=createdBy.trim();
+        assignedTo=assignedTo.trim();
+        comment=comment.trim();
+        String msg;
+        if(ticketID.equals(""))
+        {
+            msg="Ticket ID can't be empty";
+        }
+        else if(name.equals(""))
+        {
+            msg="Customer Name can't be empty";
+        }
+        else if(nameID.equals(""))
+        {
+            msg="Customer ID can't be empty";
+        }
+        else if(createdBy.equals(""))
+        {
+            msg="\"Created by\" field is necessary";
+        }
+        else if(!name.matches("^[a-zA-Z0-9. ]+$"))
+        {
+            msg="Invalid Customer Name";
+        }
+        else if(!nameID.matches("^[a-zA-Z0-9 -/]+$"))
+        {
+            msg="Invalid Customer ID";
+        }
+        else if(!createdBy.matches("^[a-zA-Z0-9. ]+$"))
+        {
+            msg="Invalid \"Created By\" field";
+        }
+        else if(!assignedTo.matches("^[a-zA-Z0-9. ]*$"))
+        {
+            msg="Invalid \"Assigned To\" field";
+        }
+        else if(status.equals("OPEN") && assignedTo.equals(""))
+        {
+            msg="Ticket with OPEN Status must be \"Assigned To\" someone";
+        }
+        else if(status.equals("NEW") && !assignedTo.equals(""))
+        {
+            msg="Ticket can't be in NEW State once it is assigned to someone";
+        }
+        else
+        {
+            msg="OK";
+        }
+        return msg;
     }
     public void setStatus()
     {
+        assignedTo=assignedTo.trim();
         if(assignedTo.equals(""))
             status="NEW";
         else
@@ -109,7 +158,6 @@ public class Ticket extends Model{
         JScrollPane commentsPane = new JScrollPane(textCommentArea);
         commentsPane.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        //areaScrollPane.setPreferredSize(new Dimension(250, 250));
         commentsPane.setBorder(
                 BorderFactory.createCompoundBorder(
                         BorderFactory.createCompoundBorder(
@@ -126,7 +174,6 @@ public class Ticket extends Model{
         closeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //JOptionPane.showMessageDialog(frame, "Roseindia.net");
                 frame.dispose();
             }
         });
@@ -137,9 +184,6 @@ public class Ticket extends Model{
         frame.setSize(500, 500);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-
-
-
     }
 
     private void addLabelTextRowsInViewDialogBox(JLabel[] labels,JTextField[] textFields,
@@ -174,7 +218,8 @@ public class Ticket extends Model{
         String right[]={ticketID,name,nameID,createdBy,assignedTo,issues,status};
         JLabel labels[]=new JLabel[7];
         JTextField textFields[]=new JTextField[7];
-        for(int i=0;i<7;i++) {
+        int i;
+        for(i=0;i<7;i++) {
             labels[i] = new JLabel(left[i] + ": ");
 
             textFields[i] = new JTextField(right[i]);
@@ -182,35 +227,27 @@ public class Ticket extends Model{
             textFields[i].setBackground(Color.WHITE);
             if(left[i].equals("Ticket ID"))
                 textFields[i].setEditable(false);
-
-         /*   if (left[i].equals("Status")) {
-
-                switch (status) {
-                    case "NEW":
-                        textFields[i].setForeground(Color.RED);
-                        break;
-                    case "OPEN":
-                        textFields[i].setForeground(Color.GREEN);
-                        break;
-                    case "CLOSED":
-                        textFields[i].setForeground(Color.BLUE);
-                        break;
-                    default:
-                        textFields[i].setForeground(Color.BLACK);
-                }
-            }*/
         }
         String issuesNames[]={"Account","Customer Service","Delivery",
                 "Exchange","General","Legal","Logistics","Payment","Personalization",
                 "Refund","Returns","Services","Shipping","Site Navigation","Supply",};
-
-                DefaultComboBoxModel issueModel = new DefaultComboBoxModel(issuesNames);
+        DefaultComboBoxModel issueModel = new DefaultComboBoxModel(issuesNames);
         JComboBox issueComboBox = new JComboBox(issueModel);
-        //panel.add(comboBox);
+
+        for(i=0;i<issuesNames.length;i++)
+        if(issuesNames[i].equals(issues))
+            break;
+        issueComboBox.setSelectedIndex(i);
+
 
         String statusNames[]={"NEW","OPEN","CLOSED"};
         DefaultComboBoxModel statusModel = new DefaultComboBoxModel(statusNames);
         JComboBox statusComboBox = new JComboBox(statusModel);
+
+        for(i=0;i<statusNames.length;i++)
+            if(statusNames[i].equals(status))
+                break;
+        statusComboBox.setSelectedIndex(i);
 
         JPanel detailsPane = new JPanel();
         GridBagLayout gridbag = new GridBagLayout();
@@ -258,14 +295,15 @@ public class Ticket extends Model{
                 issues=issueComboBox.getSelectedItem().toString();
                 status=statusComboBox.getSelectedItem().toString();
                 comment=textCommentArea.getText();
-                    if (validateTicketEntries()) {
+
+                String validateMsg=validateTicketEntries();
+                    if (validateMsg.equals("OK")) {
                         save();
                         JOptionPane.showMessageDialog(null, "Ticket ID: "+ticketID+" updated Successfully");
+                        frame.dispose();
                     } else {
-                        JOptionPane.showMessageDialog(null, "Invalid Entries for the Ticket");
+                        JOptionPane.showMessageDialog(null, validateMsg);
                     }
-                frame.setVisible(false);
-                frame.dispose();
             }
         });
         JButton closeButton=new JButton("CANCEL");
