@@ -12,9 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
-/**
- * Created by SKY on 1/15/2016.
- */
 @Entity
 public class Ticket extends Model{
     @Id
@@ -27,6 +24,41 @@ public class Ticket extends Model{
     public String status;
     @Column(length=5000)
     public String comment;
+    /*
+    Only required get and set methods are defined.
+     */
+    public void setInitialStatus()
+    {
+        assignedTo=assignedTo.trim();
+        if(assignedTo.equals(""))
+            status="NEW";
+        else
+            status="OPEN";
+    }
+    public void setStatus(String s)
+    {
+        status=s;
+    }
+    public void setTicketID()
+    {
+        List<String> list=new Model.Finder(String.class,Ticket.class).findIds();
+        int idMax=0;
+        for (String aList : list)
+        {
+            int t = Integer.parseInt(aList);
+            if (t > idMax)
+                idMax = t;
+        }
+        ticketID= Integer.toString(1+idMax);
+    }
+    public String getTicketID()
+    {
+        return ticketID;
+    }
+    public String getStatus()
+    {
+        return status;
+    }
     public void saveTicket()
     {
         save();
@@ -86,29 +118,9 @@ public class Ticket extends Model{
         }
         return msg;
     }
-    public void setStatus()
-    {
-        assignedTo=assignedTo.trim();
-        if(assignedTo.equals(""))
-            status="NEW";
-        else
-            status="OPEN";
-    }
-    public void setTicketID()
-    {
-        List<String> list=new Model.Finder(String.class,Ticket.class).findIds();
-        int idMax=0;
-        for(int i=0;i<list.size();i++)
-        {
-            int t=Integer.parseInt(list.get(i));
-            if(t>idMax)
-                idMax=t;
-        }
-        ticketID= Integer.toString(1+idMax);
-    }
-    public void showTicketViewDialogBox(){
 
-        UIManager.put("swing.boldMetal", Boolean.FALSE);
+    public void showTicketViewDialogBox()
+    {
         JFrame frame = new JFrame("Ticket ID: "+ticketID);
         frame.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -194,9 +206,9 @@ public class Ticket extends Model{
         int numLabels = labels.length;
 
         for (int i = 0; i < numLabels; i++) {
-            c.gridwidth = GridBagConstraints.RELATIVE; //next-to-last
-            c.fill = GridBagConstraints.NONE;      //reset to default
-            c.weightx = 0.0;                       //reset to default
+            c.gridwidth = GridBagConstraints.RELATIVE;
+            c.fill = GridBagConstraints.NONE;
+            c.weightx = 0.0;
             container.add(labels[i], c);
 
             c.gridwidth = GridBagConstraints.REMAINDER;     //end row
@@ -208,7 +220,6 @@ public class Ticket extends Model{
 
     public void showTicketEditDialogBox()
     {
-        UIManager.put("swing.boldMetal", Boolean.FALSE);
         JFrame frame = new JFrame("Ticket ID: "+ticketID);
         frame.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -228,22 +239,20 @@ public class Ticket extends Model{
             if(left[i].equals("Ticket ID"))
                 textFields[i].setEditable(false);
         }
+
         String issuesNames[]={"Account","Customer Service","Delivery",
                 "Exchange","General","Legal","Logistics","Payment","Personalization",
                 "Refund","Returns","Services","Shipping","Site Navigation","Supply",};
         DefaultComboBoxModel issueModel = new DefaultComboBoxModel(issuesNames);
         JComboBox issueComboBox = new JComboBox(issueModel);
-
         for(i=0;i<issuesNames.length;i++)
         if(issuesNames[i].equals(issues))
             break;
         issueComboBox.setSelectedIndex(i);
 
-
         String statusNames[]={"NEW","OPEN","CLOSED"};
         DefaultComboBoxModel statusModel = new DefaultComboBoxModel(statusNames);
         JComboBox statusComboBox = new JComboBox(statusModel);
-
         for(i=0;i<statusNames.length;i++)
             if(statusNames[i].equals(status))
                 break;
@@ -251,7 +260,6 @@ public class Ticket extends Model{
 
         JPanel detailsPane = new JPanel();
         GridBagLayout gridbag = new GridBagLayout();
-
         detailsPane.setLayout(gridbag);
         detailsPane.setBorder(
                 BorderFactory.createCompoundBorder(
@@ -261,29 +269,24 @@ public class Ticket extends Model{
         addLabelTextRowsInEditDialogBox(labels, textFields, left, right, issueComboBox, statusComboBox, gridbag, detailsPane);
 
         JTextArea textCommentArea = new JTextArea(comment);
-        //textCommentArea.setEditable(false);
         textCommentArea.setForeground(Color.BLUE);
         textCommentArea.setFont(new Font("Serif", Font.ITALIC, 16));
         textCommentArea.setLineWrap(true);
         textCommentArea.setWrapStyleWord(true);
-
         JScrollPane commentsPane = new JScrollPane(textCommentArea);
         commentsPane.setVerticalScrollBarPolicy(
                 JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        //areaScrollPane.setPreferredSize(new Dimension(250, 250));
         commentsPane.setBorder(
                 BorderFactory.createCompoundBorder(
                         BorderFactory.createCompoundBorder(
                                 BorderFactory.createTitledBorder("Comments"),
                                 BorderFactory.createEmptyBorder(5, 5, 5, 5)),
                         commentsPane.getBorder()));
-
         JPanel actionsPane=new JPanel();
         actionsPane.setBorder(
                 BorderFactory.createCompoundBorder(
                         BorderFactory.createTitledBorder("Action"),
                         BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-
         JButton saveButton=new JButton("SAVE");
         saveButton.addActionListener(new ActionListener() {
             @Override
@@ -293,12 +296,11 @@ public class Ticket extends Model{
                 createdBy=textFields[3].getText();
                 assignedTo=textFields[4].getText();
                 issues=issueComboBox.getSelectedItem().toString();
-                status=statusComboBox.getSelectedItem().toString();
+                setStatus(statusComboBox.getSelectedItem().toString());
                 comment=textCommentArea.getText();
-
                 String validateMsg=validateTicketEntries();
                     if (validateMsg.equals("OK")) {
-                        save();
+                        saveTicket();
                         JOptionPane.showMessageDialog(null, "Ticket ID: "+ticketID+" updated Successfully");
                         frame.dispose();
                     } else {
@@ -310,7 +312,6 @@ public class Ticket extends Model{
         closeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //redirect(routes.Application.index());
                 frame.dispose();
             }
         });
@@ -329,25 +330,24 @@ public class Ticket extends Model{
         c.anchor = GridBagConstraints.EAST;
         int numLabels = labels.length;
         for (int i = 0; i < numLabels; i++) {
-            c.gridwidth = GridBagConstraints.RELATIVE; //next-to-last
-            c.fill = GridBagConstraints.NONE;      //reset to default
-            c.weightx = 0.0;                       //reset to default
+            c.gridwidth = GridBagConstraints.RELATIVE;
+            c.fill = GridBagConstraints.NONE;
+            c.weightx = 0.0;
             container.add(labels[i], c);
 
-            c.gridwidth = GridBagConstraints.REMAINDER;     //end row
+            c.gridwidth = GridBagConstraints.REMAINDER;     //this on end row
             c.fill = GridBagConstraints.HORIZONTAL;
             c.weightx = 1.0;
-            if(left[i].equals("Issues related to"))
-            {
-                container.add(issueComboBox, c);
-            }
-            else if(left[i].equals("Status"))
-            {
-                container.add(statusComboBox,c);
-            }
-            else
-            {
-                container.add(textFields[i], c);
+            switch (left[i]) {
+                case "Issues related to":
+                    container.add(issueComboBox, c);
+                    break;
+                case "Status":
+                    container.add(statusComboBox, c);
+                    break;
+                default:
+                    container.add(textFields[i], c);
+                    break;
             }
         }
     }

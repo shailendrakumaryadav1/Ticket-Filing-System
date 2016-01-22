@@ -10,7 +10,7 @@ POST    /ticket                     @controllers.Application.addTicket()
 PUT     /ticket/:ticketID           @controllers.Application.editTicket(ticketID : String)
 
 GET     /tickets                    @controllers.Application.getTickets
-##########
+
 GET     /ticket/:ticketID           @controllers.Application.getTicket(ticketID : String)
 
 DELETE  /ticket/:ticketID           @controllers.Application.closeTicket(ticketID : String)

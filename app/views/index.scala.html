@@ -2,7 +2,6 @@
 
     @main("Ticket Management System") {
 
-
         <style xmlns="http://www.w3.org/1999/html">
 
         body {
@@ -22,15 +21,13 @@
         width: 100%;
         }
 
-
-
         table#table th	{
         background-color: black;
         color: white;
         height: 50px;
         font-size: large;
-
         }
+
         #commentBox
         {
         height: 100px;
@@ -38,14 +35,23 @@
         max-width: 100%;
         width: 50%;
         background-color: #e2d2ff ;
+        }
 
+        #logo
+        {
+        width:126px;
+        height:42px;
+        border:0;
+        background-color: white;
+        }
 
+        #top_head
+        {
+        background-color: #72CCD1;
         }
 
         </style>
-
         <script type="text/javascript" src='@routes.Assets.versioned("lib/jquery/jquery.min.js")'></script>
-
         <script type="text/javascript" src='@routes.Assets.versioned("javascripts/index.js")'></script>
         <script>
 
@@ -53,21 +59,16 @@
     {
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.open("PUT", "/ticket/"+ticketID, false);
-
-            /*
-            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            xmlhttp.send("ticketID="+ticketID);
-            */
-
             xmlhttp.send();
-
     }
+
     function viewTicket_Link(ticketID)
     {
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.open("GET", "/ticket/"+ticketID, false);
             xmlhttp.send();
     }
+
     function closeTicket_Link(ticketID)
     {
             var xmlhttp = new XMLHttpRequest();
@@ -77,20 +78,16 @@
 
 </script>
 
-
-
-
-        <h2 align="center" style="background-color: #72CCD1" >
+        <h2 id="top_head" align="center">
             <a href="https://www.redmart.com/">
-                <img src="@routes.Assets.versioned("images/logo.png")" alt="RedMart Logo" align="left" style="width:126px;height:42px;border:0;background-color: white">
+                <img id="logo" src="@routes.Assets.versioned("images/logo.png")" alt="RedMart Logo" align="left">
             </a>
-
-            Ticket Management System
+            @message <!-- to display "Ticket Management System" on HomePage. It can be hard-coded too. -->
         </h2>
-
         <hr color="#EF3E54">
         <hr color="#54C3C7">
         <br>
+
         <table id="table" align="center" border="2">
             <tr>
                 <th>Ticket ID</th>
@@ -100,15 +97,16 @@
                 <th>Assigned To</th>
                 <th>Issues</th>
                 <th>Status</th>
-                <th>Comments</th>
+         <!--   <th>Comments</th>   -->
                 <th>View Link</th>
                 <th>Edit Link</th>
                 <th>Close Link</th>
             </tr>
-
         </table>
+
         <br/>
         <hr>
+
         <form action="@routes.Application.addTicket()" method="post" xmlns="http://www.w3.org/1999/html">
 
             <input type="text" name="name" placeholder="Customer Name"/>
@@ -117,6 +115,7 @@
             <input type="text" name="assignedTo" placeholder="Assign To"/>
             <br>
             <hr>
+            <label>
             <b>Issues:</b>&ensp;
             <input type="radio" name="issues" value="Account"> Account&ensp;
             <input type="radio" name="issues" value="Customer Service"> Customer Service&ensp;
@@ -133,30 +132,19 @@
             <input type="radio" name="issues" value="Shipping"> Shipping&ensp;
             <input type="radio" name="issues" value="Site Navigation"> Site Navigation&ensp;
             <input type="radio" name="issues" value="Supply"> Supply&ensp;
-
+            </label>
             <hr>
-
-
             <textarea id="commentBox" name="comment" placeholder="Enter Comments" content="text"></textarea>
             <br>
             <hr>
-            <button>Add the Ticket</button>
-
-
-
+            <button>Log New Ticket</button>
         </form>
-
-
-
         <hr>
+
         <div id="footer" align="center">
             <img src="@routes.Assets.versioned("images/smiley.gif")" alt="Smiley face">
-
             <p>
                 Thank You!
             </p>
-
-
         </div>
-
     }
