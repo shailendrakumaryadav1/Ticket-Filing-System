@@ -19,9 +19,15 @@
                 else
                     t7=$("<td style=\"color: #000000\">").text(ticket.status);
                 var t8=""; //$("<td></td>").text(ticket.comment);
-                var t9=$("<td></td>").html( "<a href=\"\"  onclick=\"viewTicket_Link( "+ticket.ticketID+" )\">view</a>"  );
-                var t10=$("<td></td>").html( "<a href=\"\"  onclick=\"editTicket_Link( "+ticket.ticketID+" )\">edit</a>"  );
-                var t11=$("<td></td>").html( "<a href=\"\"  onclick=\"closeTicket_Link( "+ticket.ticketID+" )\">close</a>"  );
+                var t9=$("<td></td>").html( "<button  onclick=\"viewTicket_Link( "+ticket.ticketID+" )\">view</button>"  );
+
+
+  var t10=$("<td></td>").html( " <form action=\"/ticketEditForm/"+ticket.ticketID+"\" method=\"get\" ><button >edit</button></form>");
+
+                var t11=$("<td></td>").html( "<a href=\"\"  onclick=\"closeTicket_Link( "+ticket.ticketID+" )\"> <button>close</button>  </a>"  );
+
+                    //$("<td></td>").html( "<button  onclick=\"closeTicket_Link( "+ticket.ticketID+" )\">close</button>"  );
+
                 var t12 ="</tr>";
 
                 $("#table").append(t0,t1,t2,t3,t4,t5,t6,t7,t9,t10,t11,t12);

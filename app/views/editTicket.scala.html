@@ -1,0 +1,130 @@
+@(ticket: Ticket)
+
+@main("Ticket Management System") {
+    <style xmlns="http://www.w3.org/1999/html">
+        body {
+        background-color: #e9fefe ;
+        height:100%;
+        font-family: sans-serif;
+        }
+        table, td, th {
+        border: 1px solid black;
+        text-align: center;
+        }
+
+        table {
+        background-color: #d0e4fe;
+        border-collapse: collapse;
+        width: 100%;
+        }
+
+        table#table th	{
+        background-color: black;
+        color: white;
+        height: 50px;
+        font-size: large;
+        }
+        #commentBox
+        {
+        height: 100px;
+        max-height: 100px;
+        max-width: 100%;
+        width: 50%;
+        background-color: #e2d2ff ;
+        }
+
+        #logo
+        {
+        width:126px;
+        height:42px;
+        border:0;
+        background-color: white;
+        }
+
+        #top_head
+        {
+        background-color: #72CCD1;
+        }
+    </style>
+
+    <script type="text/javascript" src='@routes.Assets.versioned("lib/jquery/jquery.min.js")'></script>
+    <script type="text/javascript" src='@routes.Assets.versioned("javascripts/index.js")'></script>
+
+    <script type="text/javascript">
+    function submitForm()
+    {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+       if(xhttp.responseText=="OK")
+       {
+       var t1 = window.setTimeout(function(){ window.location = "@routes.Application.index()"; },0);
+       }
+    }};
+    var formData = new FormData( document.getElementById("ticket_form") );
+    var url="/ticket/".concat("@ticket.ticketID");
+    xhttp.open("PUT", url, true);
+    xhttp.send(formData);
+    return false;
+    }
+    </script>
+
+    <h2 id="top_head" align="center">
+        <a href="https://www.redmart.com/">
+            <img id="logo" src="@routes.Assets.versioned("images/logo.png")" alt="RedMart Logo" align="left">
+        </a>
+        Edit details of Ticket ID : @ticket.ticketID <!-- to display "Ticket Management System" on HomePage. It can be hard-coded too. -->
+    </h2>
+    <hr color="#EF3E54">
+    <hr color="#54C3C7">
+    <br>
+
+    <fieldset>
+        <form id="ticket_form" xmlns="http://www.w3.org/1999/html">
+            <fieldset>
+                <legend>Details</legend>
+                <hr>
+                <label for="ticketID">Ticket ID : </label><input type="text" name="ticketID" placeholder="Ticket ID" value="@ticket.ticketID" readonly/>
+                <br><hr>
+                <label for="customername">Customer Name : </label><input type="text" name="name" placeholder="Customer Name" value="@ticket.name" readonly/>
+                <br><hr>
+                <label for="customerid">Customer ID : </label><input type="text" name="nameID" placeholder="Customer ID" value="@ticket.nameID" readonly/>
+                <br><hr>
+                <label for="createdby">Created By : </label><input type="text" name="createdBy" placeholder="Created By" value="@ticket.createdBy" readonly/>
+                <br><hr>
+                <label for="assignedto">Assigned To : </label><input type="text" name="assignedTo" placeholder="Assign To" value="@ticket.assignedTo"/>
+                <br><hr>
+                <label for="issues">Issues related to : </label><input type="text" name="issues" placeholder="Issues" value="@ticket.issues" readonly/>
+                <br><hr>
+
+                <b>Status : </b>&ensp;
+                <label><input id="status_NEW" type="radio" name="status" value="NEW"> NEW&ensp;</label>
+                <label><input id="status_OPEN" type="radio" name="status" value="OPEN"> OPEN&ensp;</label>
+                <label><input id="status_CLOSED" type="radio" name="status" value="CLOSED"> CLOSED&ensp;</label>
+                <script>
+                    document.getElementById("status_".concat("@ticket.status")).checked = true;
+                </script>
+                <br><hr>
+            </fieldset>
+            <br>
+            <fieldset>
+                <legend>Comments</legend>
+                <textarea id="commentBox" name="comment" placeholder="Enter Comments" content="text" >@ticket.comment</textarea>
+            </fieldset>
+            <br>
+            <fieldset>
+                <legend>Action</legend>
+                <button onclick="return submitForm();">Save</button>
+                <button type="submit" formmethod="get" formaction="@routes.Application.index()">Cancel</button>
+            </fieldset>
+        </form>
+    </fieldset>
+    <hr>
+
+    <div id="footer" align="center">
+        <img src="@routes.Assets.versioned("images/smiley.gif")" alt="Smiley face">
+        <p>
+            Thank You!
+        </p>
+    </div>
+}

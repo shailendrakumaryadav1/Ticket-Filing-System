@@ -7,13 +7,15 @@ GET     /                           @controllers.Application.index()
 
 POST    /ticket                     @controllers.Application.addTicket()
 
-PUT     /ticket/:ticketID           @controllers.Application.editTicket(ticketID : String)
-
-GET     /tickets                    @controllers.Application.getTickets
-
 GET     /ticket/:ticketID           @controllers.Application.getTicket(ticketID : String)
 
+PUT     /ticket/:ticketID           @controllers.Application.editTicket(ticketID : String)
+
 DELETE  /ticket/:ticketID           @controllers.Application.closeTicket(ticketID : String)
+
+GET     /tickets                    @controllers.Application.getTickets()
+
+GET     /ticketEditForm/:ticketID   @controllers.Application.ticketEditForm(ticketID : String)
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               @controllers.Assets.versioned(path="/public", file: Asset)
 
