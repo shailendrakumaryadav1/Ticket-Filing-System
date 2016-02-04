@@ -32,8 +32,8 @@ db = mongoURI.connectDB();
 
         mongoClient = new MongoClient(mongoclientURI);
         db= mongoClient.getDB(mongoclientURI.getDatabase());
-        //System.out.println("\n\n\ndb initialised\n\n\n");
-//System.out.println(db.authenticate("\n\n\n"+mongoclientURI.getUsername(), mongoclientURI.getPassword()) + "\n\n\n");
+        System.out.println("\n\n\ndb initialised\n\n\n");
+System.out.println("\n\n\n"+db.authenticate(mongoclientURI.getUsername(), mongoclientURI.getPassword()) + "\n\n\n");
 
         return db;
     }
