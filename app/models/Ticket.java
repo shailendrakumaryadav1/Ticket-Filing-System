@@ -162,6 +162,7 @@ public class Ticket
 
     public void showTicketViewDialogBox()
     {
+        
         JFrame frame = new JFrame("Ticket ID: " + ticketID);
         frame.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
