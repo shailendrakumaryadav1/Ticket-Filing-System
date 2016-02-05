@@ -2,6 +2,7 @@ package controllers;
 
 import com.mongodb.*;
 import models.Ticket;
+import play.Play;
 import play.data.Form;
 import play.mvc.*;
 import views.html.*;
@@ -59,7 +60,8 @@ public class Application extends Controller {
                 cursor.close();
             }
 
-            ticket.showTicketViewDialogBox();
+            //ticket.showTicketViewDialogBox();
+            return ok(editTicket.render(ticket));
         }
         catch (Exception e)
         {

@@ -19,7 +19,7 @@
                 else
                     t7=$("<td style=\"color: #000000\">").text(ticket.status);
                 var t8=""; //$("<td></td>").text(ticket.comment);
-                var t9=$("<td></td>").html( "<button  onclick=\"viewTicket_Link( "+ticket.ticketID+" )\">view</button>"  );
+                var t9=$("<td></td>").html( "<button  onclick=\"return viewTicket_Link( "+ticket.ticketID+" )\">view</button>"  );
 
 
   var t10=$("<td></td>").html( " <form action=\"/ticketEditForm/"+ticket.ticketID+"\" method=\"get\" ><button >edit</button></form>");

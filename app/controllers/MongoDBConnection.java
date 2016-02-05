@@ -14,8 +14,9 @@ public class MongoDBConnection
     private static int port = 27017;
     */
     private static DB db=null;
-private static String uriString = "mongodb://user:password@ds055535.mongolab.com:55535/heroku_4qtvsnsj";
-
+private static String uriString = "mongodb://user:password@ds059155.mongolab.com:59155/heroku_dk3nm3r5";
+        //"mongodb://user:password@ds059155.mongolab.com:59155/heroku_dk3nm3r5";
+//Play.application().configuration().getString("play.crypto.secret");
     public static DB connectToMongo() throws Exception
     {
         if (null != db)
@@ -34,8 +35,6 @@ db = mongoURI.connectDB();
         db= mongoClient.getDB(mongoclientURI.getDatabase());
         System.out.println("\n\n\ndb initialised\n\n\n");
         db.authenticate(mongoclientURI.getUsername(), mongoclientURI.getPassword());
-        //db.addUser(mongoclientURI.getUsername(), mongoclientURI.getPassword());
-
         return db;
     }
 }
