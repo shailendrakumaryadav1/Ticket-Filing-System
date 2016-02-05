@@ -162,6 +162,10 @@ public class Ticket
 
     public void showTicketViewDialogBox()
     {
+        System.setProperty("java.awt.headless", "true");
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        // Standard beep is available.
+        tk.beep();
         JFrame frame = new JFrame("Ticket ID: " + ticketID);
         frame.setLayout(new BorderLayout());
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
