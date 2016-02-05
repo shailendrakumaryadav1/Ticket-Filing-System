@@ -1,5 +1,4 @@
 package controllers;
-import java.awt.*;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
@@ -35,12 +34,6 @@ db = mongoURI.connectDB();
         db= mongoClient.getDB(mongoclientURI.getDatabase());
         System.out.println("\n\n\ndb initialised\n\n\n");
         db.authenticate(mongoclientURI.getUsername(), mongoclientURI.getPassword());
-<<<<<<< HEAD
-=======
-        //db.addUser(mongoclientURI.getUsername(), mongoclientURI.getPassword());
-Frame f = new Frame("Frame");
-            f.setVisible(true);
->>>>>>> origin/master
         return db;
     }
 }
