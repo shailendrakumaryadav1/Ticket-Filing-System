@@ -20,13 +20,19 @@
                     t7=$("<td style=\"color: #000000\">").text(ticket.status);
                 var t8=""; //$("<td></td>").text(ticket.comment);
                 var t9=$("<td></td>").html( "<button  onclick=\"return viewTicket_Link( "+ticket.ticketID+" )\">view</button>"  );
+                if(ticket.status == "CLOSED")
+                    var t10=$("<td></td>").html("");
+                else
+                    var t10=$("<td></td>").html( "<a href=\" /ticketEditForm/"+ticket.ticketID +"\"> <button>edit</button>  </a>"  );
 
+                //   $("<td></td>").html( "<button  onclick=\"return editTicket_Link("+ticket.ticketID+",\' "+     ticket.status    +"\' )\">edit</button>"  );
+                if(ticket.status == "CLOSED")
+                    var t11=$("<td></td>").html("");
+                else
+                    var t11=$("<td></td>").html( "<button  onclick=\"return closeTicket_Link( "+ticket.ticketID+" )\">close</button>"  );
 
-  var t10=$("<td></td>").html( " <form action=\"/ticketEditForm/"+ticket.ticketID+"\" method=\"get\" ><button >edit</button></form>");
-
-                var t11=$("<td></td>").html( "<a href=\"\"  onclick=\"closeTicket_Link( "+ticket.ticketID+" )\"> <button>close</button>  </a>"  );
-
-                    //$("<td></td>").html( "<button  onclick=\"closeTicket_Link( "+ticket.ticketID+" )\">close</button>"  );
+                //"<a href=\"\"  onclick=\"closeTicket_Link( "+ticket.ticketID+" )\"> <button>close</button>  </a>"
+                //$("<td></td>").html( "<button  onclick=\"closeTicket_Link( "+ticket.ticketID+" )\">close</button>"  );
 
                 var t12 ="</tr>";
 
@@ -34,5 +40,5 @@
             });
         });
     });
-$.put
+    $.put
 `

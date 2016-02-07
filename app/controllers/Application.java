@@ -2,11 +2,9 @@ package controllers;
 
 import com.mongodb.*;
 import models.Ticket;
-import play.Play;
 import play.data.Form;
 import play.mvc.*;
 import views.html.*;
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +14,7 @@ public class Application extends Controller {
 
     public Result index()
     {
-        return ok(index.render("Ticket Management System"));
+        return ok(index.render("Ticket Filing System"));
     }
 
     public Result addTicket()
@@ -24,19 +22,13 @@ public class Application extends Controller {
         Ticket ticket = Form.form(Ticket.class).bindFromRequest().get();
         ticket.setTicketID();
         ticket.setInitialStatus();
-        String validateMsg=ticket.validateTicketEntries();
-
-        if (validateMsg.equals("OK"))
+        String msg=ticket.validateTicketEntries();
+        if (msg.equals("OK"))
         {
-            ticket.saveTicket();
-            JOptionPane.showMessageDialog(null, "Ticket Added Successfully\nTicket ID : " + ticket.getTicketID());
+            saveTicket(ticket);
+            msg="Ticket Added Successfully\nTicket ID : " + ticket.getTicketID();
         }
-        else
-        {
-            JOptionPane.showMessageDialog(null, validateMsg);
-        }
-
-        return redirect(routes.Application.index());
+        return ok(msg);
     }
 
     public Result getTicket(String ticketID)
@@ -59,15 +51,13 @@ public class Application extends Controller {
             {
                 cursor.close();
             }
-
-            //ticket.showTicketViewDialogBox();
-            return ok(editTicket.render(ticket));
+            return ok(viewTicket.render(ticket));
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-        return ok(index.render("Ticket Management System"));
+        return ok(index.render("Ticket Filing System"));
     }
 
     public Result editTicket(String ticketID)
@@ -99,19 +89,14 @@ public class Application extends Controller {
             if (ticket_old.getStatus().equals("CLOSED"))
             {
                 msg="Ticket " + ticket_old.getTicketID() + " once closed, cannot be edited";
-                JOptionPane.showMessageDialog(null, msg , "Error", JOptionPane.ERROR_MESSAGE);
             }
             else
             {
                 msg=ticket_new.validateTicketEntries();
                 if (msg.equals("OK"))
                 {
-                    ticket_old.updateTicketWith(ticket_new);
-                    JOptionPane.showMessageDialog(null, "Ticket ID: " + ticket_new.ticketID + " updated Successfully");
-                }
-                else
-                {
-                    JOptionPane.showMessageDialog(null, msg);
+                    updateTicketWith(ticket_old, ticket_new);
+                    msg="Ticket ID: " + ticket_new.ticketID + " updated Successfully";
                 }
             }
             return ok(msg);
@@ -147,10 +132,11 @@ public class Application extends Controller {
 
             if (ticket.getStatus().equals("CLOSED"))
             {
-                JOptionPane.showMessageDialog(null, "Ticket " + ticket.getTicketID() + " once closed, cannot be edited", "Error", JOptionPane.ERROR_MESSAGE);
-                return redirect(routes.Application.index());
+                String msg="Error!!!\nTicket " + ticket.getTicketID() + " once closed, cannot be edited";
+                return ok(msg);
             }
             return ok(editTicket.render(ticket));
+
         }
         catch (Exception e)
         {
@@ -164,24 +150,6 @@ public class Application extends Controller {
         {
             DB db = MongoDBConnection.connectToMongo();
             DBCollection coll = db.getCollection("TicketCollection");
-
-            /*
-            System.out.println("\n\n"+cursor.toArray().get(1).get("name")+"\n\n");
-
-            List <DBObject> tickets = new ArrayList<DBObject>();List tickets = new ArrayList<Ticket>();List tickets = cursor.toArray();
-            JSON json =new JSON();
-            String serialize = JSON.serialize(cursor);
-            System.out.println(serialize);
-            System.out.println("-------------");
-            System.out.println(JSON.parse(serialize));
-            System.out.println("-------------");
-            JsonReader jsonReader = Json.createReader(new StringReader(serialize));
-            JsonObject object = jsonReader.readObject();
-            jsonReader.close();
-
-            DBObject t=((DBObject)tickets.get(2));
-            System.out.println("\n\n"+t.get("name"));
-            */
 
             DBCursor cursor = coll.find();
             List tickets = new ArrayList<Ticket>();
@@ -231,19 +199,17 @@ public class Application extends Controller {
 
             if (ticket.getStatus().equals("CLOSED"))
             {
-                JOptionPane.showMessageDialog(null, "Ticket " + ticket.getTicketID() + " is already Closed", "Error", JOptionPane.ERROR_MESSAGE);
+                String msg="Ticket " + ticket.getTicketID() + " is already Closed";
+                return ok(msg);
             }
             else
             {
-                int dialogButton = JOptionPane.showConfirmDialog(null, "Are you sure to close the Ticket with Ticket ID: " + ticket.getTicketID(), "WARNING", JOptionPane.YES_NO_OPTION);
-                if (dialogButton == JOptionPane.YES_OPTION)
-                {
-                    Ticket ticket_new=new Ticket();
-                    ticket_new.copyTicket(ticket);
-                    ticket_new.setStatus("CLOSED");
-                    ticket.updateTicketWith(ticket_new);
-                    JOptionPane.showMessageDialog(null, "Ticket " + ticket.getTicketID() + " has been closed!");
-                }
+                Ticket ticket_new=new Ticket();
+                ticket_new.copyTicket(ticket);
+                ticket_new.setStatus("CLOSED");
+                updateTicketWith(ticket, ticket_new);
+                String msg="Ticket " + ticket.getTicketID() + " has been closed!";
+                return ok(msg);
             }
         }
         catch (Exception e)
@@ -253,4 +219,54 @@ public class Application extends Controller {
         return redirect(routes.Application.index());
     }
 
+    public void saveTicket(Ticket ticket)
+    {
+        try
+        {
+            DB db = MongoDBConnection.connectToMongo();
+            DBCollection coll = db.getCollection("TicketCollection");
+
+            BasicDBObject ob;
+            ob = new BasicDBObject("ticketID",ticket.ticketID).append("name",ticket.name).append("nameID",ticket.nameID).append("createdBy",ticket.createdBy)
+                    .append("assignedTo",ticket.assignedTo).append("issues",ticket.issues).append("status",ticket.status).append("comment",ticket.comment);
+            coll.insert(ob);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateTicketWith(Ticket ticket_old,Ticket ticket_new)
+    {
+        try
+        {
+            DB db = MongoDBConnection.connectToMongo();
+            DBCollection coll = db.getCollection("TicketCollection");
+
+            // search document where ticketID="ticket_old.ticketID" and update it with new values
+            BasicDBObject query = new BasicDBObject();
+            query.put("ticketID", ticket_old.ticketID);
+
+            BasicDBObject newDocument = new BasicDBObject();
+            newDocument.put("ticketID", ticket_new.ticketID); //redundant
+            newDocument.put("name", ticket_new.name);
+            newDocument.put("nameID", ticket_new.nameID);
+            newDocument.put("createdBy", ticket_new.createdBy);
+            newDocument.put("assignedTo", ticket_new.assignedTo);
+            newDocument.put("issues", ticket_new.issues);
+            newDocument.put("status", ticket_new.status);
+            newDocument.put("comment", ticket_new.comment);
+
+            BasicDBObject updateObj = new BasicDBObject();
+            updateObj.put("$set", newDocument);
+            coll.update(query, updateObj);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
 }
+

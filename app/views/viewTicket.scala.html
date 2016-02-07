@@ -1,0 +1,103 @@
+@(ticket: Ticket)
+
+@main("Ticket Filing System") {
+  <style xmlns="http://www.w3.org/1999/html">
+  body {
+  background-color: #e9fefe ;
+  height:100%;
+  font-family: sans-serif;
+  }
+
+  #commentBox
+  {
+  height: 100px;
+  max-height: 100px;
+  max-width: 100%;
+  width: 50%;
+  background-color: #e2d2ff ;
+  }
+
+  #logo
+  {
+  width:126px;
+  height:42px;
+  border:0;
+  background-color: white;
+  }
+
+  #top_head
+  {
+  background-color: #72CCD1;
+  }
+  </style>
+
+  <script type="text/javascript" src='@routes.Assets.versioned("lib/jquery/jquery.min.js")'></script>
+  <script type="text/javascript" src='@routes.Assets.versioned("javascripts/index.js")'></script>
+
+  <h2 id="top_head" align="center">
+    <a href="https://www.redmart.com/">
+      <img id="logo" src="@routes.Assets.versioned("images/logo.png")" alt="RedMart Logo" align="left">
+    </a>
+    View Details of Ticket ID : @ticket.ticketID
+  </h2>
+  <hr color="#EF3E54">
+  <hr color="#54C3C7">
+  <br>
+
+  <fieldset>
+    <form id="ticket_form" xmlns="http://www.w3.org/1999/html">
+      <fieldset>
+        <legend>Details</legend>
+        <hr>
+        <label for="ticketID">Ticket ID : </label><input type="text" name="ticketID" placeholder="Ticket ID" value="@ticket.ticketID" readonly/>
+        <br><hr>
+        <label for="customername">Customer Name : </label><input type="text" name="name" placeholder="Customer Name" value="@ticket.name" readonly/>
+        <br><hr>
+        <label for="customerid">Customer ID : </label><input type="text" name="nameID" placeholder="Customer ID" value="@ticket.nameID" readonly/>
+        <br><hr>
+        <label for="createdby">Created By : </label><input type="text" name="createdBy" placeholder="Created By" value="@ticket.createdBy" readonly/>
+        <br><hr>
+        <label for="assignedto">Assigned To : </label><input type="text" name="assignedTo" placeholder="Assign To" value="@ticket.assignedTo" readonly/>
+        <br><hr>
+        <label for="issues">Issues related to : </label><input type="text" name="issues" placeholder="Issues" value="@ticket.issues" readonly/>
+        <br><hr>
+        <label for="status"><b>Status : </b>&ensp;</label><input id="status" type="text" name="status" placeholder="Status" value="@ticket.status" readonly/>
+          <script>
+          switch ("@ticket.status")
+          {
+          case "NEW":
+          document.getElementById("status").style.color = "red";
+          break;
+          case "OPEN":
+          document.getElementById("status").style.color = "green";
+          break;
+          case "CLOSED":
+          document.getElementById("status").style.color = "blue";
+          break;
+          default :
+          document.getElementById("status").style.color = "black";
+          }
+          </script>
+          <br><hr>
+      </fieldset>
+      <br>
+      <fieldset>
+        <legend>Comments</legend>
+        <textarea id="commentBox" name="comment" placeholder="Enter Comments" content="text" readonly>@ticket.comment</textarea>
+      </fieldset>
+      <br>
+      <fieldset>
+        <legend>Action</legend>
+        <button onclick="window.close()">OK</button>
+      </fieldset>
+    </form>
+  </fieldset>
+  <hr>
+
+  <div id="footer" align="center">
+    <img src="@routes.Assets.versioned("images/smiley.gif")" alt="Smiley face">
+    <p>
+      Thank You!
+    </p>
+  </div>
+}

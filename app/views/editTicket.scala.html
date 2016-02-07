@@ -1,64 +1,51 @@
 @(ticket: Ticket)
 
-@main("Ticket Management System") {
+@main("Ticket Filing System") {
     <style xmlns="http://www.w3.org/1999/html">
-        body {
-        background-color: #e9fefe ;
-        height:100%;
-        font-family: sans-serif;
-        }
-        table, td, th {
-        border: 1px solid black;
-        text-align: center;
-        }
+    body {
+    background-color: #e9fefe ;
+    height:100%;
+    font-family: sans-serif;
+    }
 
-        table {
-        background-color: #d0e4fe;
-        border-collapse: collapse;
-        width: 100%;
-        }
+    #commentBox
+    {
+    height: 100px;
+    max-height: 100px;
+    max-width: 100%;
+    width: 50%;
+    background-color: #e2d2ff ;
+    }
 
-        table#table th	{
-        background-color: black;
-        color: white;
-        height: 50px;
-        font-size: large;
-        }
-        #commentBox
-        {
-        height: 100px;
-        max-height: 100px;
-        max-width: 100%;
-        width: 50%;
-        background-color: #e2d2ff ;
-        }
+    #logo
+    {
+    width:126px;
+    height:42px;
+    border:0;
+    background-color: white;
+    }
 
-        #logo
-        {
-        width:126px;
-        height:42px;
-        border:0;
-        background-color: white;
-        }
-
-        #top_head
-        {
-        background-color: #72CCD1;
-        }
+    #top_head
+    {
+    background-color: #72CCD1;
+    }
     </style>
 
     <script type="text/javascript" src='@routes.Assets.versioned("lib/jquery/jquery.min.js")'></script>
     <script type="text/javascript" src='@routes.Assets.versioned("javascripts/index.js")'></script>
 
     <script type="text/javascript">
+
     function submitForm()
     {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
     if (xhttp.readyState == 4 && xhttp.status == 200) {
-       if(xhttp.responseText=="OK")
+       var res=xhttp.responseText;
+       alert(res);
+       if(res.indexOf("updated Successfully")>=0)
        {
-       var t1 = window.setTimeout(function(){ window.location = "@routes.Application.index()"; },0);
+       window.location = "@routes.Application.index()";
        }
     }};
     var formData = new FormData( document.getElementById("ticket_form") );
@@ -67,13 +54,14 @@
     xhttp.send(formData);
     return false;
     }
+
     </script>
 
     <h2 id="top_head" align="center">
         <a href="https://www.redmart.com/">
             <img id="logo" src="@routes.Assets.versioned("images/logo.png")" alt="RedMart Logo" align="left">
         </a>
-        Edit details of Ticket ID : @ticket.ticketID <!-- to display "Ticket Management System" on HomePage. It can be hard-coded too. -->
+        Edit Details of Ticket ID : @ticket.ticketID
     </h2>
     <hr color="#EF3E54">
     <hr color="#54C3C7">
@@ -96,7 +84,6 @@
                 <br><hr>
                 <label for="issues">Issues related to : </label><input type="text" name="issues" placeholder="Issues" value="@ticket.issues" readonly/>
                 <br><hr>
-
                 <b>Status : </b>&ensp;
                 <label><input id="status_NEW" type="radio" name="status" value="NEW"> NEW&ensp;</label>
                 <label><input id="status_OPEN" type="radio" name="status" value="OPEN"> OPEN&ensp;</label>

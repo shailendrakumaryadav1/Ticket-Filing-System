@@ -1,6 +1,6 @@
 @(message: String)
 
-@main("Ticket Management System") {
+@main("Ticket Filing System") {
 
     <style xmlns="http://www.w3.org/1999/html">
 
@@ -56,17 +56,30 @@
     <script type="text/javascript" src='@routes.Assets.versioned("javascripts/index.js")'></script>
     <script>
 
+    function submitForm()
+    {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+       var res=xhttp.responseText;
+       alert(res);
+       if(res.indexOf("Ticket Added Successfully")==0)
+       {
+       window.location = "@routes.Application.index()";
+       }
+    }};
+    var formData = new FormData( document.getElementById("ticket_form") );
+    var url="/ticket";
+    xhttp.open("POST", url, true);
+    xhttp.send(formData);
+    return false;
+    }
+
     function popupwindow(url, title, w, h) {
         var left = (screen.width/2)-(w/2);
         var top = (screen.height/2)-(h/2);
-        return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);
+        return window.open(url, title, 'width='+w+', height='+h+', top='+top+', left='+left);
 }
-    function editTicket_Link(ticketID)
-    {
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.open("GET", "/ticketEditForm/"+ticketID, false);
-            xmlhttp.send();
-    }
 
     function viewTicket_Link(ticketID)
     {
@@ -75,19 +88,28 @@
 
     function closeTicket_Link(ticketID)
     {
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.open("DELETE", "/ticket/"+ticketID, false);
-            xmlhttp.send();
-
+    var answer=confirm("Are you sure you want to close the ticket with Ticket ID : "+ticketID);
+    if (answer==true)
+    {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+    if (xhttp.readyState == 4 && xhttp.status == 200) {
+       var res=xhttp.responseText;
+       alert(res);
+       window.location = "@routes.Application.index()";
+    }};
+    var url="/ticket/"+ticketID;
+    xhttp.open("DELETE", url, true);
+    xhttp.send();
     }
-
+    }
 </script>
 
     <h2 id="top_head" align="center">
         <a href="https://www.redmart.com/">
             <img id="logo" src="@routes.Assets.versioned("images/logo.png")" alt="RedMart Logo" align="left">
         </a>
-        @message <!-- to display "Ticket Management System" on HomePage. It can be hard-coded too. -->
+        @message
     </h2>
     <hr color="#EF3E54">
     <hr color="#54C3C7">
@@ -112,7 +134,7 @@
     <br/>
     <hr>
 
-    <form action="@routes.Application.addTicket()" method="post" xmlns="http://www.w3.org/1999/html">
+    <form id="ticket_form" xmlns="http://www.w3.org/1999/html">
 
         <input type="text" name="name" placeholder="Customer Name"/>
         <input type="text" name="nameID" placeholder="Customer ID"/>
@@ -120,7 +142,6 @@
         <input type="text" name="assignedTo" placeholder="Assign To"/>
         <br>
         <hr>
-
         <b>Issues:</b>&ensp;
         <label><input type="radio" name="issues" value="Account"> Account&ensp;</label>
         <label><input type="radio" name="issues" value="Customer Service"> Customer Service&ensp;</label>
@@ -141,7 +162,7 @@
         <textarea id="commentBox" name="comment" placeholder="Enter Comments" content="text"></textarea>
         <br>
         <hr>
-        <button>Log New Ticket</button>
+        <button onclick="return submitForm();">Log New Ticket</button>
     </form>
     <hr>
 

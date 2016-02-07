@@ -1,4 +1,4 @@
-name := """Ticket-Management-System"""
+name := """Ticket-Filing-System"""
 
 version := "1.0-SNAPSHOT"
 
@@ -19,4 +19,3 @@ libraryDependencies += "org.mongodb" % "mongo-java-driver" % "2.14.0"
 // Play provides two styles of routers, one expects its actions to be injected, the
 // other, legacy style, accesses its actions statically.
 routesGenerator := InjectedRoutesGenerator
-herokuAppName in Compile := "ticket-management-system"
