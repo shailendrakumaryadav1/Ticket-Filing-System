@@ -54,6 +54,10 @@
     xhttp.send(formData);
     return false;
     }
+    function cancelForm()
+    {
+    window.location = "@routes.Application.index()";
+    }
 
     </script>
 
@@ -99,12 +103,12 @@
                 <textarea id="commentBox" name="comment" placeholder="Enter Comments" content="text" >@ticket.comment</textarea>
             </fieldset>
             <br>
-            <fieldset>
-                <legend>Action</legend>
-                <button onclick="return submitForm();">Save</button>
-                <button type="submit" formmethod="get" formaction="@routes.Application.index()">Cancel</button>
-            </fieldset>
         </form>
+        <fieldset>
+            <legend>Action</legend>
+            <button onclick="return submitForm();">Save</button>
+            <button onclick="return cancelForm();">Cancel</button>
+        </fieldset>
     </fieldset>
     <hr>
 
