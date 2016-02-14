@@ -1,6 +1,15 @@
 This is a Ticket Filing System
 =================================
 
+To view a live working demo, visit the heroku deployment link.
+Heroku Deploy Link:
+    https://ticket-filing-system.herokuapp.com
+
+Link to the problem statement and a presentation of the project:
+    https://drive.google.com/file/d/0BzQ7LutOibcaV2drSUlaUG9QZ2s/view?usp=sharing
+
+=================================
+
 Ticketing system
 Customers often have complaints which call the customer service representatives and talk to. The CSR then logs the information by choosing the available areas to which the issue is related to, into the system. This record is called as a ticket. A ticket has the below details :-
 
